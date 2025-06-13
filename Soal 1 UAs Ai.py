@@ -1,0 +1,50 @@
+# Soal 1: BFS - Pencarian Jalur Terpendek Antar Sekolah di Bandar Lampung
+from collections import deque
+
+def bfs_shortest_path(graph, start, goal):
+    explored = set()
+    queue = deque([[start]])
+
+    if start == goal:
+        return [start]
+
+    while queue:
+        path = queue.popleft()
+        node = path[-1]
+
+        if node not in explored:
+            neighbors = graph.get(node, [])
+
+            for neighbor in neighbors:
+                new_path = list(path)
+                new_path.append(neighbor)
+                queue.append(new_path)
+
+                if neighbor == goal:
+                    return new_path
+
+            explored.add(node)
+
+    return None
+
+# Graph sekolah di Bandar Lampung
+graph = {
+    'SMAN 1': ['SMAN 2', 'SMKN 2'],
+    'SMAN 2': ['SMAN 1', 'SMAN 9', 'SMKN 4'],
+    'SMKN 2': ['SMAN 1'],
+    'SMAN 9': ['SMAN 2'],
+    'SMKN 4': ['SMAN 2', 'SMAN 5'],
+    'SMAN 5': ['SMKN 4']
+}
+
+start = 'SMAN 1'
+goal = 'SMAN 5'
+path = bfs_shortest_path(graph, start, goal)
+
+if path:
+    print("Jalur Terpendek Antar Sekolah:")
+    for idx, sekolah in enumerate(path, 1):
+        print(f"{idx}. {sekolah}")
+else:
+    print("Jalur tidak ditemukan.")
+
